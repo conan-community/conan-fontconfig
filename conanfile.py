@@ -1,9 +1,13 @@
+
+import os
+import shutil
+
 from conans import ConanFile, CMake, tools, AutoToolsBuildEnvironment
 
 
 class FontconfigConan(ConanFile):
     name = "fontconfig"
-    version = "2.13.0"
+    version = "2.13.1"
     license = "<Put the package license here>"
     url = "<Package recipe repository url here, for issues about the package>"
     description = "<Description of Fontconfig here>"
@@ -22,24 +26,32 @@ class FontconfigConan(ConanFile):
         url = "https://www.freedesktop.org/software/fontconfig/release/fontconfig-{version}.tar.gz"
         tools.get(url.format(version=self.version))
 
+        # Patch files from project itself
+        #  - fontconfig requires libtool version number, change it for the corresponding freetype one
+        tools.replace_in_file(
+            os.path.join(self.source_folder, '{}-{}'.format(self.name, self.version), 'configure'),
+            '21.0.15', '2.8.1')
+
+    def _patch_pc_files(self):
+        # Patch freetype2
+        freetype_path = self.deps_cpp_info["freetype"].rootpath
+        shutil.copyfile(os.path.join(freetype_path, "lib", "pkgconfig", "freetype2.pc"),
+                        "freetype2.pc")
+        tools.replace_prefix_in_pc_file("freetype2.pc", freetype_path)
+
     def build(self):
+        # Patch files from dependencies
+        self._patch_pc_files()
+
         autotools = AutoToolsBuildEnvironment(self)
-
-        prefix = '/home/jgsogo/.conan/data/freetype/2.9.0/bincrafters/stable/package/1e25f8fc336196e0898e984c1f0498b55571827c'
-        libdir = prefix + '/lib'
-        includedir = prefix + '/include'
-        includedir3 = prefix + '/include/freetype2'
-        LIBS = '-L{libdir} -lfreetype -lm -Wl,-rpath="{libdir}"'.format(libdir=libdir)
-        CFLAGS = '-I${includedir} -I${includedir3}'.format(includedir=includedir, includedir3=includedir3)
-
-        with tools.environment_append({'FREETYPE_LIBS': LIBS, 'FREETYPE_CFLAGS': CFLAGS}):
-            autotools.configure(configure_dir="{name}-{version}".format(name=self.name, version=self.version))
-            autotools.make()
+        autotools.configure(
+            configure_dir="{name}-{version}".format(name=self.name, version=self.version))
+        autotools.make()
 
     def package(self):
         with tools.chdir(self.build_folder):
             self.run("make install")
 
     def package_info(self):
-        self.cpp_info.libs = ["fontconfig",]
+        self.cpp_info.libs = ["fontconfig", ]
 
