@@ -6,10 +6,7 @@ environment:
     PYTHON_ARCH: "32"
 
     CONAN_REFERENCE: "fontconfig/2.13.1"
-    CONAN_USERNAME: "conan"
-    CONAN_LOGIN_USERNAME: "conanbot"
     CONAN_CHANNEL: "testing"
-    CONAN_UPLOAD: "https://api.bintray.com/conan/conan-community/conan"
     CONAN_STABLE_BRANCH_PATTERN: "release/*"
     CONAN_TOTAL_PAGES: 2
     CONAN_UPLOAD_ONLY_WHEN_STABLE: 1 # Will only upload when the branch matches "release/*"
