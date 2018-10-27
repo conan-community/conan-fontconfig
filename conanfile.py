@@ -22,7 +22,7 @@ class FontconfigConan(ConanFile):
             self.requires("libuuid/1.0.3@bincrafters/stable")
 
     def build_requirements(self):
-        self.build_requires("gperf/3.1@jgsogo/stable")
+        self.build_requires("gperf/3.1@conan/stable")
 
     def source(self):
         url = "https://www.freedesktop.org/software/fontconfig/release/fontconfig-{version}.tar.gz"
