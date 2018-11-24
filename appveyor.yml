@@ -10,7 +10,7 @@ environment:
     CONAN_UPLOAD: "https://api.bintray.com/conan/jgsogo/conan-packages"
     CONAN_STABLE_BRANCH_PATTERN: "release/*"
     CONAN_UPLOAD_ONLY_WHEN_STABLE: 1 # Will only upload when the branch matches "release/*"
-    CONAN_REMOTES: https://api.bintray.com/conan/bincrafters/public-conan@False@bincrafters
+    CONAN_REMOTES: https://api.bintray.com/conan/conan-community/conan@True@conan-community, https://api.bintray.com/conan/bincrafters/public-conan@True@bincrafters
 
     matrix:
         - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
