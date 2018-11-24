@@ -7,7 +7,7 @@ env:
      - CONAN_STABLE_BRANCH_PATTERN: "release/*"
      - CONAN_UPLOAD_ONLY_WHEN_STABLE: 1 # Will only upload when the branch matches "release/*"
      - CONAN_DOCKER_32_IMAGES: 1
-     - CONAN_REMOTES: https://api.bintray.com/conan/conan-community/conan@True@conan-community, https://api.bintray.com/conan/bincrafters/public-conan@True@bincrafters
+     - CONAN_REMOTES: https://api.bintray.com/conan/conan-community/conan@True@conan-community,https://api.bintray.com/conan/bincrafters/public-conan@True@bincrafters
 
 linux: &linux
    os: linux
