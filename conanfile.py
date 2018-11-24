@@ -18,6 +18,7 @@ class FontconfigConan(ConanFile):
 
     def requirements(self):
         self.requires("freetype/2.9.0@bincrafters/stable")
+        self.requires("expat/2.2.5@bincrafters/stable")
         if self.settings.os == "Linux":
             self.requires("libuuid/1.0.3@bincrafters/stable")
 
