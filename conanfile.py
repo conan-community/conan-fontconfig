@@ -3,14 +3,18 @@ import os
 import shutil
 
 from conans import ConanFile, CMake, tools, AutoToolsBuildEnvironment
+from conans.errors import ConanInvalidConfiguration
 
 
 class FontconfigConan(ConanFile):
     name = "fontconfig"
     version = "2.13.1"
-    license = "<Put the package license here>"
-    url = "<Package recipe repository url here, for issues about the package>"
-    description = "<Description of Fontconfig here>"
+
+    license = "https://gitlab.freedesktop.org/fontconfig/fontconfig/blob/master/COPYING"
+    url = "https://github.com/conan-community/conan-fontconfig"
+    description = "Fontconfig is a library for configuring and customizing font access"
+    homepage = "https://www.freedesktop.org/wiki/Software/fontconfig/"
+
     settings = "os", "compiler", "build_type", "arch"
     options = {"shared": [True, False]}
     default_options = "shared=False"
@@ -24,6 +28,10 @@ class FontconfigConan(ConanFile):
 
     def build_requirements(self):
         self.build_requires("gperf/3.1@conan/stable")
+
+    def configure(self):
+        if self.settings.os == "Windows":
+            raise ConanInvalidConfiguration("Windows builds are not supported.")
 
     def source(self):
         url = "https://www.freedesktop.org/software/fontconfig/release/fontconfig-{version}.tar.gz"
