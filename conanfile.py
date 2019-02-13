@@ -52,12 +52,12 @@ class FontconfigConan(ConanFile):
                     "--disable-docs"]
             self._autotools = AutoToolsBuildEnvironment(self)
             self._autotools.configure(configure_dir=self._source_subfolder, args=args)
+            tools.replace_in_file("Makefile", "po-conf test", "po-conf")
         return self._autotools
 
     def _patch_files(self):
         #  - fontconfig requires libtool version number, change it for the corresponding freetype one
         tools.replace_in_file(os.path.join(self._source_subfolder, 'configure'), '21.0.15', '2.8.1')
-        tools.replace_in_file(os.path.join(self._source_subfolder, 'Makefile.am'), 'po-conf test', 'po-conf')
         # Patch freetype2
         freetype_path = self.deps_cpp_info["freetype"].rootpath
         shutil.copyfile(os.path.join(freetype_path, "lib", "pkgconfig", "freetype2.pc"), "freetype2.pc")
@@ -73,8 +73,6 @@ class FontconfigConan(ConanFile):
         self.copy("COPYING", dst="licenses", src=self._source_subfolder)
         autotools = self._configure_autotools()
         autotools.install()
-        for it in ["share", "var", "etc"]:
-            tools.rmdir(os.path.join(self.package_folder, it))
 
     def package_info(self):
         self.cpp_info.libs = tools.collect_libs(self)

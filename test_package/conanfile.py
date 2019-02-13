@@ -1,6 +1,7 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 import os
-
-from conans import ConanFile, CMake, tools
+from conans import ConanFile, CMake, tools, RunEnvironment
 
 
 class FontconfigTestConan(ConanFile):
@@ -8,12 +9,12 @@ class FontconfigTestConan(ConanFile):
     generators = "cmake"
 
     def build(self):
-        pass
-
-    def imports(self):
-        self.copy("*.dll", dst="bin", src="bin")
-        self.copy("*.dylib*", dst="bin", src="lib")
-        self.copy('*.so*', dst='bin', src='lib')
+        cmake = CMake(self)
+        cmake.configure()
+        cmake.build()
 
     def test(self):
-        pass
+        bin_path = os.path.join("bin", "example")
+        env = {"FONTCONFIG_PATH": os.path.join(self.deps_cpp_info["fontconfig"].rootpath, "etc", "fonts")}
+        with tools.environment_append(env):
+            self.run(bin_path, run_environment=True)
