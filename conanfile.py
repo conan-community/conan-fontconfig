@@ -34,9 +34,11 @@ class FontconfigConan(ConanFile):
         self.build_requires("gperf/3.1@conan/stable")
 
     def configure(self):
-        if self.settings.os == "Windows":
-            raise ConanInvalidConfiguration("Windows builds are not supported.")
+        if self.settings.compiler == "Visual Studio":
+            raise ConanInvalidConfiguration("Visual Studio builds are not supported.")
         del self.settings.compiler.libcxx
+        if self.settings.os == "Windows":
+            del self.options.fPIC
 
     def source(self):
         source_url = "https://www.freedesktop.org/software/fontconfig/release/fontconfig-{}.tar.gz"
@@ -50,7 +52,7 @@ class FontconfigConan(ConanFile):
             args = ["--enable-static=%s" % ("no" if self.options.shared else "yes"),
                     "--enable-shared=%s" % ("yes" if self.options.shared else "no"),
                     "--disable-docs"]
-            self._autotools = AutoToolsBuildEnvironment(self)
+            self._autotools = AutoToolsBuildEnvironment(self, win_bash=tools.os_info.is_windows)
             self._autotools.configure(configure_dir=self._source_subfolder, args=args)
             tools.replace_in_file("Makefile", "po-conf test", "po-conf")
         return self._autotools
