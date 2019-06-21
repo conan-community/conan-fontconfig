@@ -42,6 +42,9 @@ class FontconfigConan(ConanFile):
         extrated_dir = self.name + "-" + self.version
         os.rename(extrated_dir, self._source_subfolder)
 
+    def build_requirements(self):
+        self.build_requires("gperf_installer/3.1@conan/stable")
+
     def _configure_autotools(self):
         if not self._autotools:
             args = ["--enable-static=%s" % ("no" if self.options.shared else "yes"),
