@@ -9,7 +9,7 @@ from conans.errors import ConanInvalidConfiguration
 
 class FontconfigConan(ConanFile):
     name = "fontconfig"
-    version = "2.13.1"
+    version = "2.13.91"
     license = "MIT"
     url = "https://github.com/conan-community/conan-fontconfig"
     description = "Fontconfig is a library for configuring and customizing font access"
@@ -25,13 +25,10 @@ class FontconfigConan(ConanFile):
     _autotools = None
 
     def requirements(self):
-        self.requires("freetype/2.9.0@bincrafters/stable")
-        self.requires("expat/2.2.5@bincrafters/stable")
+        self.requires("freetype/2.9.1@bincrafters/stable")
+        self.requires("Expat/2.2.6@pix4d/stable")
         if self.settings.os == "Linux":
             self.requires("libuuid/1.0.3@bincrafters/stable")
-
-    def build_requirements(self):
-        self.build_requires("gperf/3.1@conan/stable")
 
     def configure(self):
         if self.settings.os == "Windows":
@@ -40,10 +37,13 @@ class FontconfigConan(ConanFile):
 
     def source(self):
         source_url = "https://www.freedesktop.org/software/fontconfig/release/fontconfig-{}.tar.gz"
-        sha256 = "9f0d852b39d75fc655f9f53850eb32555394f36104a044bb2b2fc9e66dbbfa7f"
+        sha256 = "19e5b1bc9d013a52063a44e1307629711f0bfef35b9aca16f9c793971e2eb1e5"
         tools.get(source_url.format(self.version), sha256=sha256)
         extrated_dir = self.name + "-" + self.version
         os.rename(extrated_dir, self._source_subfolder)
+
+    def build_requirements(self):
+        self.build_requires("gperf_installer/3.1@conan/stable")
 
     def _configure_autotools(self):
         if not self._autotools:
