@@ -73,6 +73,9 @@ class FontconfigConan(ConanFile):
         self.copy("COPYING", dst="licenses", src=self._source_subfolder)
         autotools = self._configure_autotools()
         autotools.install()
+        la = os.path.join(self.package_folder, "lib", "libfontconfig.la")
+        if os.path.isfile(la):
+            os.unlink(la)
 
     def package_info(self):
         self.cpp_info.libs = tools.collect_libs(self)
