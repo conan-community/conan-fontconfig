@@ -44,6 +44,8 @@ class FontconfigConan(ConanFile):
 
     def build_requirements(self):
         self.build_requires("gperf_installer/3.1@conan/stable")
+        if not tools.which("pkg-config"):
+            self.build_requires("pkg-config_installer/0.29.2@bincrafters/stable")
 
     def _configure_autotools(self):
         if not self._autotools:
