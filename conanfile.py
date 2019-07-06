@@ -64,6 +64,8 @@ class FontconfigConan(ConanFile):
         freetype_path = self.deps_cpp_info["freetype"].rootpath
         shutil.copyfile(os.path.join(freetype_path, "lib", "pkgconfig", "freetype2.pc"), "freetype2.pc")
         tools.replace_prefix_in_pc_file("freetype2.pc", freetype_path)
+        if self.settings.build_type == "Debug":
+            tools.replace_in_file("freetype2.pc", "-lfreetype", "-lfreetyped")
 
     def build(self):
         # Patch files from dependencies
