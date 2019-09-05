@@ -32,6 +32,9 @@ jobs:
         env: CONAN_GCC_VERSIONS=8 CONAN_DOCKER_IMAGE=conanio/gcc8
       - <<: *linux
         stage: conan-linux
+        env: CONAN_GCC_VERSIONS=9 CONAN_DOCKER_IMAGE=conanio/gcc9
+      - <<: *linux
+        stage: conan-linux
         env: CONAN_CLANG_VERSIONS=3.9 CONAN_DOCKER_IMAGE=conanio/clang39
       - <<: *linux
         stage: conan-linux
@@ -45,6 +48,9 @@ jobs:
       - <<: *linux
         stage: conan-linux
         env: CONAN_CLANG_VERSIONS=7.0 CONAN_DOCKER_IMAGE=conanio/clang7
+      - <<: *linux
+        stage: conan-linux
+        env: CONAN_CLANG_VERSIONS=8 CONAN_DOCKER_IMAGE=conanio/clang8
       - <<: *osx
         stage: conan-osx
         osx_image: xcode7.3
