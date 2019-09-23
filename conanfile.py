@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 import os
 import shutil
+import re
 
 from conans import ConanFile, tools, AutoToolsBuildEnvironment
 from conans.errors import ConanInvalidConfiguration
@@ -26,7 +27,7 @@ class FontconfigConan(ConanFile):
 
     def requirements(self):
         self.requires("freetype/2.10.0@bincrafters/stable")
-        self.requires("Expat/2.2.6@pix4d/stable")
+        self.requires("expat/2.2.7")
         if self.settings.os == "Linux":
             self.requires("libuuid/1.0.3@bincrafters/stable")
 
@@ -65,7 +66,11 @@ class FontconfigConan(ConanFile):
         shutil.copyfile(os.path.join(freetype_path, "lib", "pkgconfig", "freetype2.pc"), "freetype2.pc")
         tools.replace_prefix_in_pc_file("freetype2.pc", freetype_path)
         if self.settings.build_type == "Debug":
-            tools.replace_in_file("freetype2.pc", "-lfreetype", "-lfreetyped")
+            content = tools.load("freetype2.pc")
+            content = re.sub("-lfreetype(?!d)", "-lfreetyped", content)
+            content = content.encode("utf-8")
+            with open("freetype2.pc", "wb") as handle:
+                handle.write(content)
 
     def build(self):
         # Patch files from dependencies
