@@ -26,7 +26,7 @@ class FontconfigConan(ConanFile):
     _autotools = None
 
     def requirements(self):
-        self.requires("freetype/2.10.0@bincrafters/stable")
+        self.requires("freetype/2.10.0")
         self.requires("expat/2.2.7")
         if self.settings.os == "Linux":
             self.requires("libuuid/1.0.3@bincrafters/stable")
@@ -35,6 +35,7 @@ class FontconfigConan(ConanFile):
         if self.settings.os == "Windows":
             raise ConanInvalidConfiguration("Windows builds are not supported.")
         del self.settings.compiler.libcxx
+        del self.settings.compiler.cppstd
 
     def source(self):
         source_url = "https://www.freedesktop.org/software/fontconfig/release/fontconfig-{}.tar.gz"
@@ -61,16 +62,8 @@ class FontconfigConan(ConanFile):
     def _patch_files(self):
         #  - fontconfig requires libtool version number, change it for the corresponding freetype one
         tools.replace_in_file(os.path.join(self._source_subfolder, 'configure'), '21.0.15', '2.8.1')
-        # Patch freetype2
-        freetype_path = self.deps_cpp_info["freetype"].rootpath
-        shutil.copyfile(os.path.join(freetype_path, "lib", "pkgconfig", "freetype2.pc"), "freetype2.pc")
-        tools.replace_prefix_in_pc_file("freetype2.pc", freetype_path)
-        if self.settings.build_type == "Debug":
-            content = tools.load("freetype2.pc")
-            content = re.sub("-lfreetype(?!d)", "-lfreetyped", content)
-            content = content.encode("utf-8")
-            with open("freetype2.pc", "wb") as handle:
-                handle.write(content)
+        os.rename('freetype.pc', 'freetype2.pc')
+        os.rename('ZLIB.pc', 'zlib.pc')
 
     def build(self):
         # Patch files from dependencies
