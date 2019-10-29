@@ -29,7 +29,7 @@ class FontconfigConan(ConanFile):
         self.requires("freetype/2.10.0")
         self.requires("expat/2.2.7")
         if self.settings.os == "Linux":
-            self.requires("libuuid/1.0.3@bincrafters/stable")
+            self.requires("libuuid/1.0.3")
 
     def configure(self):
         if self.settings.os == "Windows":
