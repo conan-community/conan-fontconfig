@@ -63,7 +63,6 @@ class FontconfigConan(ConanFile):
         #  - fontconfig requires libtool version number, change it for the corresponding freetype one
         tools.replace_in_file(os.path.join(self._source_subfolder, 'configure'), '21.0.15', '2.8.1')
         os.rename('freetype.pc', 'freetype2.pc')
-        os.rename('ZLIB.pc', 'zlib.pc')
 
     def build(self):
         # Patch files from dependencies
