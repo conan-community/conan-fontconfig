@@ -51,7 +51,7 @@ matrix:
 
 install:
   - chmod +x .travis/install.sh
-  - ./.travis/install.sh
+  - source ./.travis/install.sh
 
 script:
   - chmod +x .travis/run.sh
