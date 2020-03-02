@@ -80,6 +80,7 @@ class FontconfigConan(ConanFile):
         la = os.path.join(self.package_folder, "lib", "libfontconfig.la")
         if os.path.isfile(la):
             os.unlink(la)
+        tools.rmdir(os.path.join(self.package_folder, "lib", "pkgconfig"))
 
     def package_info(self):
         self.cpp_info.libs = tools.collect_libs(self)
